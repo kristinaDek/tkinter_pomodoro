@@ -3,36 +3,13 @@ import tkinter.font as font
 from tkinter import ttk
 from _collections import deque
 
+
 try:
     from ctypes import windll
 
     windll.shcore.SetProcessDpiAwareness(1)
 except:
     pass
-
-
-class PomodoroTimer(tk.Tk):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.title("Pomodoro timer!")
-        self.columnconfigure(0, weight=1)
-        self.rowconfigure(1, weight=1)
-
-        self.pomodoro = tk.StringVar(value=25)
-        self.short_break = tk.StringVar(value=5)
-        self.long_break = tk.StringVar(value=15)
-        self.timer_order = ["Pomodoro", "Short break", "Pomodoro", "Short break", "Pomodoro", "Long break"]
-        self.timer_schedule = deque(self.timer_order)
-
-        container = ttk.Frame(self)
-        container.grid()
-        container.columnconfigure(0, weight=1)
-
-        timer_frame = Timer(container, self)
-        timer_frame.grid(row=0, column=0, sticky="NSEW")
-
-
-
 
 class Timer(ttk.Frame):
     def __init__(self, container, controller, **kwargs):
@@ -102,6 +79,7 @@ class Timer(ttk.Frame):
 
     def reset_timer(self):
         self.stop_timer()
+        self.reset_button["state"] = "disabled"
         pomodoro_time = int(self.controller.pomodoro.get())
         self.controller.timer_schedule = deque(self.controller.timer_order)
         self.current_time.set(f"{pomodoro_time:02d}:00")
@@ -154,7 +132,3 @@ class Timer(ttk.Frame):
 
 
 
-if __name__ == '__main__':
-
-    root = PomodoroTimer()
-    root.mainloop()
