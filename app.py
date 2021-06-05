@@ -3,18 +3,38 @@ import tkinter.font as font
 from tkinter import ttk
 from _collections import deque
 from frames import Timer, Settings
+from windows import set_dpi_awarness
 
-try:
-    from ctypes import windll
+set_dpi_awarness()
 
-    windll.shcore.SetProcessDpiAwareness(1)
-except:
-    pass
 
+COLOR_PRIMARY = "#e3baab"
+COLOR_SECONDARY = "#B0BFDF"
+BACKUP_COLOR = "#89A3D0"
+CORAL_TEXT = "#FF6666"
+GREEN_TEXT = "#3D6C7D"
+CHOCO_TEXT = "#8B7A80"
+YELLOW_TEXT = "#F6A400"
 
 class PomodoroTimer(tk.Tk):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
+        style = ttk.Style(self)
+        style.theme_use("clam")
+
+        style.configure("Timer.TFrame", background=BACKUP_COLOR)
+        style.configure("Background.TFrame", background=COLOR_SECONDARY)
+        style.configure("TimerText.TLabel", background=BACKUP_COLOR, foreground=GREEN_TEXT, font="Courier 38")
+        #generic
+        style.configure("LightText.TLabel", background=COLOR_SECONDARY, foreground=CHOCO_TEXT, font="Courier 12")
+        style.configure("PomodoroButton.TButton", background=COLOR_SECONDARY, foreground=GREEN_TEXT, font="Courier 10")
+        style.configure("SpinC.TSpinbox", background=COLOR_SECONDARY, foreground=GREEN_TEXT, font="Courier 10")
+        style.map("PomodoroButton.TButton", background=[("active", CHOCO_TEXT), ("disabled", BACKUP_COLOR)], foreground=[("active", GREEN_TEXT), ("disabled", CHOCO_TEXT)])
+
+        self["background"] = COLOR_SECONDARY
+
+
         self.title("Good luck!")
         self.columnconfigure(0, weight=1)
         self.rowconfigure(1, weight=1)
@@ -28,6 +48,7 @@ class PomodoroTimer(tk.Tk):
         container = ttk.Frame(self)
         container.grid()
         container.columnconfigure(0, weight=1)
+
 
         self.frames = dict()
 

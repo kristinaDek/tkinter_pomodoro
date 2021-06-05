@@ -3,18 +3,10 @@ import tkinter.font as font
 from tkinter import ttk
 from _collections import deque
 
-
-try:
-    from ctypes import windll
-
-    windll.shcore.SetProcessDpiAwareness(1)
-except:
-    pass
-
 class Timer(ttk.Frame):
     def __init__(self, container, controller, show_settings, **kwargs):
         super().__init__(container, **kwargs)
-
+        self["style"] = "Background.TFrame"
         self.controller = controller
         pomodoro_time = int(controller.pomodoro.get())
         self.current_time = tk.StringVar(value=f"{pomodoro_time:02d}:00")
@@ -24,35 +16,39 @@ class Timer(ttk.Frame):
         self.current_timer_label = tk.StringVar(value=controller.timer_schedule[0])
 
         timer_lab = ttk.Frame(self, height="50")
+        timer_lab["style"] = "Background.TFrame"
         timer_lab.grid(row=0, column=0, pady=(10, 0), sticky="NSEW")
-        timer_description = ttk.Label(timer_lab, textvariable=self.current_timer_label)
+        timer_description = ttk.Label(timer_lab, textvariable=self.current_timer_label, style="LightText.TLabel")
 
         timer_description.place(relx=0.5, rely=0.5, anchor="center")
         self.settings_button = ttk.Button(
             self,
             text="Settings",
+            style="PomodoroButton.TButton",
             command=show_settings,
             cursor="hand2"
         )
         self.settings_button.grid(row=0, column=1, sticky="E", padx=10, pady=(10, 0))
 
-        timer_fr = ttk.Frame(self, height="100")
+        timer_fr = ttk.Frame(self, height="100", style="Timer.TFrame")
         timer_fr.grid(row= 1, column= 0, pady=(10,0), sticky="NSEW", columnspan=2)
 
         timer_counter = ttk.Label(
             timer_fr,
-            textvariable=self.current_time
+            textvariable=self.current_time,
+            style="TimerText.TLabel"
         )
 
         timer_counter.place(relx=0.5, rely=0.5, anchor="center")
 
-        button_container = ttk.Frame(self, padding=10)
+        button_container = ttk.Frame(self, padding=10, style="Timer.TFrame")
         button_container.grid(row=2, column=0, columnspan=2, sticky="EW")
         button_container.columnconfigure((0, 1, 2), weight=1)
 
         self.start_button = ttk.Button(
             button_container,
             text="Start",
+            style="PomodoroButton.TButton",
             command=self.start_timer,
             cursor="hand2"
         )
@@ -61,6 +57,7 @@ class Timer(ttk.Frame):
         self.stop_button = ttk.Button(
             button_container,
             text="Stop",
+            style="PomodoroButton.TButton",
             state="disabled",
             command=self.stop_timer,
             cursor="hand2"
@@ -70,6 +67,7 @@ class Timer(ttk.Frame):
         self.reset_button = ttk.Button(
             button_container,
             text="Reset",
+            style="PomodoroButton.TButton",
             state="disabled",
             command=self.reset_timer,
             cursor="hand2"
