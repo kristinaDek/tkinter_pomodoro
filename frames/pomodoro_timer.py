@@ -12,7 +12,7 @@ except:
     pass
 
 class Timer(ttk.Frame):
-    def __init__(self, container, controller, **kwargs):
+    def __init__(self, container, controller, show_settings, **kwargs):
         super().__init__(container, **kwargs)
 
         self.controller = controller
@@ -28,9 +28,16 @@ class Timer(ttk.Frame):
         timer_description = ttk.Label(timer_lab, textvariable=self.current_timer_label)
 
         timer_description.place(relx=0.5, rely=0.5, anchor="center")
+        self.settings_button = ttk.Button(
+            self,
+            text="Settings",
+            command=show_settings,
+            cursor="hand2"
+        )
+        self.settings_button.grid(row=0, column=1, sticky="E", padx=10, pady=(10, 0))
 
         timer_fr = ttk.Frame(self, height="100")
-        timer_fr.grid(row= 1, column= 0, pady=(10,0), sticky="NSEW")
+        timer_fr.grid(row= 1, column= 0, pady=(10,0), sticky="NSEW", columnspan=2)
 
         timer_counter = ttk.Label(
             timer_fr,
@@ -40,7 +47,7 @@ class Timer(ttk.Frame):
         timer_counter.place(relx=0.5, rely=0.5, anchor="center")
 
         button_container = ttk.Frame(self, padding=10)
-        button_container.grid(row=2, column=0)
+        button_container.grid(row=2, column=0, columnspan=2, sticky="EW")
         button_container.columnconfigure((0, 1, 2), weight=1)
 
         self.start_button = ttk.Button(

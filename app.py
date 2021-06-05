@@ -2,7 +2,7 @@ import tkinter as tk
 import tkinter.font as font
 from tkinter import ttk
 from _collections import deque
-from frames import Timer
+from frames import Timer, Settings
 
 try:
     from ctypes import windll
@@ -29,8 +29,23 @@ class PomodoroTimer(tk.Tk):
         container.grid()
         container.columnconfigure(0, weight=1)
 
-        timer_frame = Timer(container, self)
+        self.frames = dict()
+
+        timer_frame = Timer(container, self, lambda:self.show_frame(Settings))
         timer_frame.grid(row=0, column=0, sticky="NSEW")
+        settings_frame = Settings(container, self, lambda:self.show_frame(Timer))
+        settings_frame.grid(row=0, column=0, sticky="NSEW")
+
+        self.frames[Timer] = timer_frame
+        self.frames[Settings] = settings_frame
+
+        self.show_frame(Timer)
+
+    def show_frame(self, container):
+        frame = self.frames[container]
+        frame.tkraise()
+
+
 
 if __name__ == '__main__':
 
